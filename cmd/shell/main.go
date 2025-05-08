@@ -1,40 +1,28 @@
 package main
 
 import (
-    "bufio"
-    "fmt"
-    "os"
+	"fmt"
+	"io"
+	"os"
 
-    "github.com/Ritikchauhan1704/go_shell/internal/commands"
-    "github.com/Ritikchauhan1704/go_shell/internal/parser"
+	"github.com/Ritikchauhan1704/go_shell/internal/shell"
+
+	"github.com/peterh/liner"
 )
 
 func main() {
-    reader := bufio.NewReader(os.Stdin)
-    for {
-        fmt.Print("$ ")
-        input, err := reader.ReadString('\n')
-        if err != nil {
-            fmt.Fprintln(os.Stderr, "Error reading input:", err)
-            os.Exit(1)
-        }
+	// Initialize liner for enhanced line editing
+	line := liner.NewLiner()
+	defer line.Close()
+	line.SetCtrlCAborts(true)
 
-        input = parser.Trim(input)
-        if input == "" {
-            continue
-        }
+	// Create shell instance
+	sh := shell.New(line)
 
-        cmdName, args := parser.Split(input)
-
-        // Handle redirections
-        cleanArgs, outFile, outR, outAppend, errFile, errR, errAppend := parser.ParseRedirection(args)
-        if outR || errR {
-            commands.HandleRedirection(outFile, outR, outAppend, errFile, errR, errAppend, func() {
-                commands.Run(cmdName, cleanArgs, input)
-            })
-            continue
-        }
-
-        commands.Run(cmdName, cleanArgs, input)
-    }
+	// Run the shell
+	err := sh.Run()
+	if err != nil && err != io.EOF {
+		fmt.Fprintln(os.Stderr, "Shell exited with error:", err)
+		os.Exit(1)
+	}
 }
