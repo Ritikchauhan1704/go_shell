@@ -28,8 +28,6 @@ A feature-rich, interactive shell implementation written in Go with advanced lin
 
 ## 🚀 Getting Started
 
-### Installation
-
 ```bash
 # Clone the repository
 git clone https://github.com/Ritikchauhan1704/go_shell
@@ -38,11 +36,14 @@ cd go_shell
 # Install dependencies
 go mod tidy
 
-# Build the shell
-go build -o goshell cmd/main.go
+# Build and run using Makefile
+make build    # Builds to bin/main
+make run      # Run directly with go run
+make run-bin  # Build and run binary
 
-# Run the shell
-./goshell
+# Or build manually
+go build -o bin/main cmd/shell/main.go
+./bin/main
 ```
 
 ### Dependencies
