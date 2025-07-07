@@ -1,4 +1,4 @@
-# 🐚 Go Shell
+🐚 Go Shell
 
 A feature-rich, interactive shell implementation written in Go with advanced line editing capabilities, command completion, and I/O redirection support.
 
